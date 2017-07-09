@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Game</title>
+		<style>
+			body {
+				background-color: black;
+			}
+			#gameCanvas {
+				background-color: #7ec0ee;
+				width: 960px;
+				height: 540px;
+				margin: auto;
+				align: center;
+			}
+			/*#scoreboard {
+				text-align: center;
+				font-family: Segoe UI, Helvetica, Ubuntu, sans-serif;
+				color: white;
+			}
+			#scores {
+				font-size:600%; 
+				padding:0; 
+				margin:0;
+				color: white;
+			}
+			#title {
+				background-color: white;
+				color: black;
+			}*/
+		</style>
+	</head>
+	<body onload='game();'>
+		<div id='gameCanvas'></div>
+		<script src='./scripts/three.min.js'></script>
+		<script src='./scripts/game.js'></script>
+		<script src='./scripts/keyboard.js'></script>
+
+		
+		<!-- trying to incorporate a HUD here  -->
+<!-- 
+		<script type="text/javascript" src="./scripts/digitaldisplay copy.js"></script>
+		<script type="text/javascript" src="./scripts/speedometer copy.js"></script>
+		 -->
+
+
+		<div id='scoreboard'>
+			<h1 id='scores'>0-0</h1>
+			<h1 id='title'>3D PONG</h1>
+			<h2 id='winnerBoard'>First to 7 wins!</h2>
+			<h3>A - move left
+			<br>D - move right</h3>
+		</div>
+	</body>
+</html>

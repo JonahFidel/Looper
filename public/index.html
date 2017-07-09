@@ -1,0 +1,269 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<style>
+			/*Bulk Text*/
+			h1   {color: white;
+					font-family: "Georgia", Sans-serif, Sans-serif;}
+
+			/*Looper Title*/
+			h2   {color: white;
+				  font-size: 550%;
+				  font-family: "Georgia", serif, serif;}	
+
+			/*Bugs*/
+			h3 {color: red;
+				font-size: 100%;
+				font-family: "Georgia", Sans-serif, Sans-serif;}
+
+			/*Action Items*/
+			h4 {color: yellow;
+				font-size: 100%;
+				font-family: "Georgia", Sans-serif, Sans-serif;}
+
+			/*Functionalities*/
+			h5 {color: lime;
+				font-size: 100%;
+				font-family: "Georgia", Sans-serif, Sans-serif;}
+		</style>
+
+		<title>Looper</title>
+			<h2> 
+				LOOPER
+			</h2>
+			<h1>
+				By Jonah Fidel<br><br>
+	
+				I initially developed this game with Michael Dunnegan as our final project for COSC 435: Computer Graphics. Professor Elodie Fourquet taught the course at Colgate University in the Spring of 2016. 
+
+				<br> <br> 
+
+				I have continued to develop the game following the conclusion of the course. <br><br>
+
+				The object of the game is to collect rings in order to earn as many points as possible while avoiding obstacles on the course. 
+
+				<br>
+				<br>
+
+				If a collision is detected between the spaceship and an obstacle, the game restarts. 
+
+
+				<br>
+				<br>
+
+
+				CONTROLS <br>
+				Directions: A S D W <br>
+				Pause: P <br> 
+
+		</h1> 
+		<style>
+			body {
+				background-color: black;
+
+			}
+			#gameCanvas {
+				background-color: #FFFFFF;
+				width: 960px;
+				height: 540px;
+				margin: auto;
+			}
+		</style>
+	</head>
+	<body onload='game();'>
+		
+		<script id="vertexShader" type="x-shader/x-vertex">
+			uniform sampler2D noiseTexture;
+			uniform float noiseScale;
+			uniform sampler2D bumpTexture;
+			uniform float bumpSpeed;
+			uniform float bumpScale;
+			uniform float time;
+			varying vec2 vUv;
+
+		void main() 
+		{ 
+		    vUv = uv;
+			
+			vec2 uvTimeShift = vUv + vec2( 1.1, 1.9 ) * time * bumpSpeed;
+			vec4 noiseGeneratorTimeShift = texture2D( noiseTexture, uvTimeShift );
+			vec2 uvNoiseTimeShift = vUv + noiseScale * vec2( noiseGeneratorTimeShift.r, noiseGeneratorTimeShift.g );
+			// below, using uvTimeShift seems to result in more of a "rippling" effect
+			//   while uvNoiseTimeShift seems to result in more of a "shivering" effect
+			vec4 bumpData = texture2D( bumpTexture, uvTimeShift );
+
+			// move the position along the normal
+			//  but displace the vertices at the poles by the same amount
+			float displacement = ( vUv.y > 0.999 || vUv.y < 0.001 ) ? 
+				bumpScale * (0.3 + 0.02 * sin(time)) :  
+				bumpScale * bumpData.r;
+		    vec3 newPosition = position + normal * displacement;
+			
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+		}
+		</script>
+
+		<!-- fragment shader a.k.a. pixel shader -->
+		<script id="fragmentShader" type="x-shader/x-vertex"> 
+		uniform sampler2D baseTexture;
+		uniform float baseSpeed;
+		uniform float repeatS;
+		uniform float repeatT;
+
+		uniform sampler2D noiseTexture;
+		uniform float noiseScale;
+
+		uniform sampler2D blendTexture;
+		uniform float blendSpeed;
+		uniform float blendOffset;
+
+		uniform float time;
+		uniform float alpha;
+
+		varying vec2 vUv;
+
+		void main() 
+		{
+			vec2 uvTimeShift = vUv + vec2( -0.7, 1.5 ) * time * baseSpeed;	
+			vec4 noiseGeneratorTimeShift = texture2D( noiseTexture, uvTimeShift );
+			vec2 uvNoiseTimeShift = vUv + noiseScale * vec2( noiseGeneratorTimeShift.r, noiseGeneratorTimeShift.b );
+			vec4 baseColor = texture2D( baseTexture, uvNoiseTimeShift * vec2(repeatS, repeatT) );
+
+			vec2 uvTimeShift2 = vUv + vec2( 1.3, -1.7 ) * time * blendSpeed;	
+			vec4 noiseGeneratorTimeShift2 = texture2D( noiseTexture, uvTimeShift2 );
+			vec2 uvNoiseTimeShift2 = vUv + noiseScale * vec2( noiseGeneratorTimeShift2.g, noiseGeneratorTimeShift2.b );
+			vec4 blendColor = texture2D( blendTexture, uvNoiseTimeShift2 * vec2(repeatS, repeatT) ) - blendOffset * vec4(1.0, 1.0, 1.0, 1.0);
+
+			vec4 theColor = baseColor + blendColor;
+			theColor.a = alpha;
+			gl_FragColor = theColor;
+		}  
+		</script>
+
+
+		<div id='gameCanvas'></div>
+		<script src='./scripts/three.js'></script>
+		<script src='./scripts/stats.js'></script>
+		<script src='./scripts/game3.js'></script>
+		<script src='./scripts/particleEngine.js' ></script>
+		<script src='./scripts/particleEngineExamples.js' ></script>
+		<script src='./scripts/keyboard.js'></script>
+
+
+	</body>
+	 	<h1>
+	 		<br>
+
+		 	We primarily used the WebGL framework and three.js library for JavaScript in order to create the game. The index code is written in HTML and CSS and we also incorporated .json 3D models constructed in Blender to create the spaceship and terrain. In order to host the game online, I used a Node.js backbone for Heroku. The domain name "jonahfidel.com" is hosted by godaddy.com and redirects to this Heroku page. 
+
+		 	<br> 
+		 	<br> 
+
+		 	All code can be found at my github: https://github.com/JonahFidel/Looper
+		 	<br>
+		 	Please email bugs or suggestions to jfidel130@gmail.com
+
+		 	<br>
+</h1> 
+<h5>
+		 	Functionalities: 
+		 	<br>
+		 	- Infinite-runner algorithm
+		 	<br>
+		 	- Boundary redirection with red arrows 
+		 	<br> 
+		 	- Collision detection 
+		 	<br>
+		 	- HUD 
+		 	<br>
+		 	- Score update
+		 	<br>
+		 	- Particle animation on back of spaceship
+		 	<br> - Pause function
+		 	<br> 
+		 	- User controlled spaceship
+		 	<br> - Game restart upon obstacle collision 
+		 	<br> 
+		 	- Added Google Analytics
+		</h5>
+		<h3>
+			Bugs: 
+			<br>
+				 - Score fails to update occasionally
+				 <br>
+				 - Pause shows up occasionally when game ends 
+				 <br> 
+				 - Score will continue to update while game is paused
+				 <br>
+				 - Ship can move while game is paused
+		</h3>
+		<h4>
+			Action Items: 
+			<br> 
+				- Environment changes with key press
+				<br>
+				- Environment changes at score checkpoints
+				<br> 
+				- Fire rings worth double
+				<br> 
+				- Game speed increases as time elapses 
+				<br> 
+				- Power ups on course 
+				<br> 
+				- Make a game-over screen instead of instant restart 
+				<br> 
+				- Add lives feature
+				<br>
+				- Make score pop up after each successful ring gathered (i.e. "+50")
+		</h4>
+		<h1>
+			Older versions of Looper: 
+			<style>
+			 a.underline {
+    			text-decoration: none;
+  				}
+			 a.underline span {
+			    display: inline-block;
+			    border-bottom: 1px solid blue;
+			    font-size: 35px;
+			    color: blue;
+			    line-height: 32px;
+			  }
+  </style>
+
+			<br> 
+			<br>
+			<a href= "https://looper-v1.herokuapp.com/" class = 'underline'><span> Mike's first build</span></a>
+<br>
+			This was the first working version with the spaceship imported from Blender. 
+
+		</h1>
+			<h3>
+				Note: the textures do not load in Google Chrome; use Firefox or Safari for this version 
+			</h3>
+			<h1>
+				<a href= "https://looper-v2.herokuapp.com/" class = 'underline'><span> Jonah's first build</span></a>
+
+				<br>
+
+				This was my first version with a pause function working. The spaceship had not been imported at this stage. 
+			</h1>
+			<h1>
+				<a href= "https://looper-v3.herokuapp.com/" class = 'underline'><span> First merge build</span></a>
+
+				<br>
+
+				This is the first merged version of my and Mike's code with the spaceship and environment. 
+			</h1>
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		  ga('create', 'UA-83610007-1', 'auto');
+		  ga('send', 'pageview');
+
+		</script>
+</html>

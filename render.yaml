@@ -1,0 +1,11 @@
+# Node is pinned in .node-version. package.json engines.node is 5.9.1,
+# which Render cannot install, and .node-version outranks that field.
+services:
+  - type: web
+    name: looper
+    runtime: node
+    plan: free
+    branch: master
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /

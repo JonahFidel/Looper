@@ -529,8 +529,7 @@ function ObstacleGenerator(){
 					}),
 					new THREE.MeshPhongMaterial({
 						color:0xffffff, 
-						map: THREE.ImageUtils.loadTexture( '
-							/pyramid6.jpg'),
+						map: THREE.ImageUtils.loadTexture( 'textures/pyramid6.jpg'),
 					})]; 
 }
 

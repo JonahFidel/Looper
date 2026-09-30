@@ -1,5 +1,6 @@
 # Node is pinned in .node-version. package.json engines.node is 5.9.1,
 # which Render cannot install, and .node-version outranks that field.
+# Every service stays on the free plan and attaches no disk.
 services:
   - type: web
     name: looper
@@ -9,3 +10,39 @@ services:
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /
+
+  - type: web
+    name: looper-mike-first
+    runtime: node
+    plan: free
+    branch: master
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: LOOPER_BUILD
+        value: mike
+
+  - type: web
+    name: looper-jonah-first
+    runtime: node
+    plan: free
+    branch: master
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: LOOPER_BUILD
+        value: jonah
+
+  - type: web
+    name: looper-first-merge
+    runtime: node
+    plan: free
+    branch: master
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: LOOPER_BUILD
+        value: merge

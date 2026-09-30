@@ -20,7 +20,7 @@ Create a Blueprint from this repository in the Render dashboard and deploy those
 All four services use the free plan, follow `master`, and attach no disk.
 `looper` serves the current homepage.
 `looper-mike-first` boots `public/scripts/old/version2.js` at [https://looper-mike-first.onrender.com/](https://looper-mike-first.onrender.com/).
-`looper-jonah-first` boots `public/scripts/old/oldGame.js` at [https://looper-jonah-first.onrender.com/](https://looper-jonah-first.onrender.com/).
+`looper-jonah-first` boots `public/scripts/old/jonahBuild.js` at [https://looper-jonah-first.onrender.com/](https://looper-jonah-first.onrender.com/).
 `looper-first-merge` boots `public/scripts/game2.js` at [https://looper-first-merge.onrender.com/](https://looper-first-merge.onrender.com/).
 The homepage labels point at those three sites.
 Service settings live in `render.yaml`.
